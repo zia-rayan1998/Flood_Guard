@@ -174,6 +174,7 @@ from datetime import datetime
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from database import db
 
 load_dotenv()
 
@@ -266,12 +267,52 @@ def index():
 def map():
     return render_template('map.html')
 
+# @app.route('/alerts')
+# def alerts():
+#     db = get_db()
+#     alerts = db.execute('SELECT * FROM alerts ORDER BY created_at DESC').fetchall()
+#     db.close()
+#     return render_template('alerts.html', alerts=alerts)
+
+# @app.route('/volunteer', methods=['GET', 'POST'])
+# def volunteer():
+#     if request.method == 'POST':
+#         name = request.form['name']
+#         email = request.form['email']
+#         phone = request.form['phone']
+#         location = request.form['location']
+#         skills = request.form['skills']
+#         availability = request.form['availability']
+#         ngo_id = request.form.get('ngo_id', 1)  # Default to first NGO
+        
+#         db = get_db()
+#         db.execute('INSERT INTO volunteers (name, email, phone, location, skills, availability, ngo_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+#                   (name, email, phone, location, skills, availability, ngo_id))
+#         db.commit()
+#         db.close()
+        
+        # flash('Your volunteer application has been submitted successfully! The NGO will contact you soon.', 'success')
+        # return redirect(url_for('volunteer'))
+    
+#     db = get_db()
+#     ngos = db.execute('SELECT * FROM ngos').fetchall()
+#     db.close()
+    
+#     return render_template('volunteer.html', ngos=ngos)
+
+
+# @app.route('/alerts')
+# def alerts():
+#     alerts = db.get_all_alerts()
+#     return render_template('alerts.html', alerts=alerts)
+
 @app.route('/alerts')
 def alerts():
-    db = get_db()
-    alerts = db.execute('SELECT * FROM alerts ORDER BY created_at DESC').fetchall()
-    db.close()
+    conn = get_db()
+    alerts = conn.execute('SELECT * FROM alerts ORDER BY created_at DESC').fetchall()
+    conn.close()
     return render_template('alerts.html', alerts=alerts)
+
 
 @app.route('/volunteer', methods=['GET', 'POST'])
 def volunteer():
@@ -283,21 +324,61 @@ def volunteer():
         skills = request.form['skills']
         availability = request.form['availability']
         ngo_id = request.form.get('ngo_id', 1)  # Default to first NGO
-        
-        db = get_db()
-        db.execute('INSERT INTO volunteers (name, email, phone, location, skills, availability, ngo_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+
+        conn = get_db()
+        conn.execute('INSERT INTO volunteers (name, email, phone, location, skills, availability, ngo_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
                   (name, email, phone, location, skills, availability, ngo_id))
-        db.commit()
-        db.close()
-        
-        flash('Your volunteer application has been submitted successfully! The NGO will contact you soon.', 'success')
+        conn.commit()
+        conn.close()
+
+        flash('Volunteer application submitted successfully!', 'success')
         return redirect(url_for('volunteer'))
-    
-    db = get_db()
-    ngos = db.execute('SELECT * FROM ngos').fetchall()
-    db.close()
+
+    conn = get_db()
+    ngos = conn.execute('SELECT * FROM ngos').fetchall()
+    conn.close()
     
     return render_template('volunteer.html', ngos=ngos)
+
+
+
+# @app.route('/volunteer', methods=['GET', 'POST'])
+# def volunteer():
+#     if request.method == 'POST':
+#         # Get form data
+#         name = request.form['name']
+#         email = request.form['email']
+#         # ... other fields
+        
+#         # Save to database
+#         success = db.create_volunteer(name, email, phone, location, skills, availability, ngo_id)
+# @app.route('/volunteer', methods=['GET', 'POST'])
+# def volunteer():
+#     if request.method == 'POST':
+#         name = request.form['name']
+#         email = request.form['email']
+#         phone = request.form['phone']
+#         location = request.form['location']
+#         skills = request.form['skills']
+#         availability = request.form['availability']
+#         ngo_id = request.form.get('ngo_id', 1)  # Default to first NGO
+        
+#         db = get_db()
+#         db.execute('INSERT INTO volunteers (name, email, phone, location, skills, availability, ngo_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+#                   (name, email, phone, location, skills, availability, ngo_id))
+#         db.commit()
+#         db.close()
+#         success = db.create_volunteer(name, email, phone, location, skills, availability, ngo_id)
+
+        
+#         if success:
+#             flash('Application submitted successfully!', 'success')
+#             return redirect(url_for('volunteer'))
+#         else:
+#             flash('Error submitting application. Please try again.', 'danger')
+    
+#     ngos = db.get_all_ngos()
+#     return render_template('volunteer.html', ngos=ngos)
 
 @app.route('/resources')
 def resources():

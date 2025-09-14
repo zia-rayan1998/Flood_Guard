@@ -104,16 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Check if we're on the home page
-    if (document.querySelector('.hero')) {
-        // Check if browser supports geolocation
-        if ("geolocation" in navigator) {
-            // Simulating an alert for demo purposes
-            setTimeout(() => {
-                const simulateAlert = confirm("FloodGuard Alert: Heavy rainfall predicted in your area in the next 24 hours. View safety tips?");
-                if (simulateAlert) {
-                    window.location.href = "/resources";
-                }
-            }, 5000);
-        }
-    }
+    // if (document.querySelector('.hero')) {
+    //     // Check if browser supports geolocation
+    //     if ("geolocation" in navigator) {
+    //         // Simulating an alert for demo purposes
+    //         setTimeout(() => {
+    //             const simulateAlert = confirm("FloodGuard Alert: Heavy rainfall predicted in your area in the next 24 hours. View safety tips?");
+    //             if (simulateAlert) {
+    //                 window.location.href = "/resources";
+    //             }
+    //         }, 5000);
+    //     }
+    // }
 });
