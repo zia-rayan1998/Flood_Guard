@@ -1,2 +1,3 @@
 floodguard.db
-
+__pycache__/
+*.pyc
